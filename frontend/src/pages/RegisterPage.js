@@ -5,12 +5,12 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import MenuBar from "../components/MenuBar";
-import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup";
 import ToggleButton from "react-bootstrap/ToggleButton";
-import { ButtonToolbar } from "react-bootstrap";
+import axios from "axios";
+import { redirect } from "react-router-dom";
 
+const REACT_APP_API_HOST = process.env.REACT_APP_API_HOST;
 const ROLE = {
   STUDENT: 0,
   PROFESSOR: 1,
@@ -20,6 +20,8 @@ function RegisterPage() {
   const [id, setId] = useState("");
   const [pwd, setPwd] = useState("");
   const [pwdConfirm, setPwdConfirm] = useState("");
+  const [name, setName] = useState("");
+  const [idNum, setIdNum] = useState("");
   const [role, setRole] = useState(ROLE.STUDENT);
 
   const onIdChange = (event) => {
@@ -31,13 +33,51 @@ function RegisterPage() {
   const onPwdConfirmChange = (event) => {
     setPwdConfirm(event.target.value);
   };
+  const onNameChange = (event) => {
+    setName(event.target.value);
+  };
+  const onIdNumChange = (event) => {
+    setIdNum(event.target.value);
+  };
   const onRoleChange = (value) => {
     if (value !== role) setRole(value);
   };
 
-  const onLogin = () => {
-    console.log(id);
-    console.log(pwd);
+  const checkInput = () => {
+    if (pwd !== pwdConfirm) return false;
+
+    return true;
+  };
+
+  const onConfirm = () => {
+    if (!checkInput()) {
+      alert("정보 입력이 잘못되었습니다.");
+      return;
+    }
+    const body = {
+      user_id: id,
+      user_password: pwd,
+      user_name: name,
+      id_num: idNum,
+      user_role: role,
+    };
+
+    axios
+      .post(REACT_APP_API_HOST + "/users", body)
+      .then((res) => {
+        if (res.status === 200) {
+          alert(res.data);
+          window.location.replace("/");
+          return;
+        } else {
+          alert("에러가 발생했습니다: ", res.data);
+          return;
+        }
+      })
+      .catch((err) => {
+        alert(err.response.data);
+        return;
+      });
   };
 
   return (
@@ -81,12 +121,12 @@ function RegisterPage() {
           </Row>
           <Row>
             <InputGroup className="mb-2">
-              <Form.Control placeholder="이름" onChange={onIdChange} />
+              <Form.Control placeholder="이름" onChange={onNameChange} />
             </InputGroup>
           </Row>
           <Row>
             <InputGroup className="mb-2">
-              <Form.Control placeholder="학번" onChange={onIdChange} />
+              <Form.Control placeholder="학번" onChange={onIdNumChange} />
             </InputGroup>
           </Row>
           <Row className="mb-2">
@@ -119,7 +159,7 @@ function RegisterPage() {
             <Button
               variant="outline-primary"
               id="login-button"
-              onClick={onLogin}
+              onClick={onConfirm}
               active
             >
               완료
