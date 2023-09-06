@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const connection = require("../config/mysql.js");
-const { checkKeys } = require("../utils/common.js");
+const { checkKeys, createHash } = require("../utils/common.js");
 const db = connection.init();
 connection.open(db);
 
@@ -33,11 +33,12 @@ router.post("/", function (req, res) {
       if (error) throw error;
       const id_exists = rows[0]["id_exists"];
       if (id_exists == 0) {
+        // ID 생성
         db.query(
           "INSERT INTO users(user_id, user_password, user_name, id_num, user_role) VALUES (?,?,?,?,?)",
           [
             body.user_id,
-            body.user_password,
+            createHash(body.user_password), //비밀번호 단방향 해시
             body.user_name,
             body.id_num,
             body.user_role,

@@ -1,4 +1,6 @@
-function checkKeys(object, keys) {
+const crypto = require("crypto");
+
+const checkKeys = (object, keys) => {
   try {
     for (const key in keys) {
       if (!(key in object)) return key;
@@ -7,6 +9,10 @@ function checkKeys(object, keys) {
   } catch (e) {
     console.log("checking keys in object failed with : ", e);
   }
-}
+};
 
-module.exports = { checkKeys };
+const createHash = (data) => {
+  return crypto.createHash("sha512").update(data).digest("base64");
+};
+
+module.exports = { checkKeys, createHash };
