@@ -49,14 +49,48 @@ router.post("/", isUser, function (req, res) {
         }
       }
     );
+  }
+});
+
+router.delete("/:registration_id", isUser, function (req, res) {
+  if (req.session.user_role === 0) {
+    // 학생이 직접 수강 취소하는 케이스
+    db.query(
+      "DELETE FROM registration WHERE user_id=? AND registration_id=?",
+      [req.session.user_id, req.params.registration_id],
+      (error, result) => {
+        if (result.affectedRows > 0) {
+          res.status(200).json("수강 취소 성공했습니다.");
+        } else {
+          res.status(404).json("수강 취소 실패했습니다.");
+        }
+      }
+    );
   } else if (req.session.user_role === 1) {
-    // 교수자가 수강생 관리하는 코드
-    // const body = req.body;
-    // const required_key = ["course_id","user_id"];
-    // const insufficient_key = checkKeys(body, required_key);
-    // if (!insufficient_key) {
-    //   res.status(400).json(insufficient_key + "가 입력되지 않았습니다.");
-    // }
+    // 교수자가 수강생 취소하는 케이스
+    const body = req.body;
+    const required_key = ["user_id"];
+    const insufficient_key = checkKeys(body, required_key);
+    if (!insufficient_key) {
+      res.status(400).json(insufficient_key + "가 입력되지 않았습니다.");
+    }
+    db.query(
+      "SELECT user_id FROM courses WHERE course_id=(SELECT course_id FROM registration WHERE registration_id=?)",
+      [req.params.registration_id],
+      (error, rows, fields) => {
+        if (rows[0].user_id === req.session.user_id) {
+          db.query(
+            "DELETE FROM registration WHERE registration_id=?",
+            [req.params.registration_id],
+            (error, result) => {
+              res.status(200).json("수강 취소 성공했습니다.");
+            }
+          );
+        } else {
+          res.status(401).json("이 강의의 교수자가 아닙니다.");
+        }
+      }
+    );
   }
 });
 
