@@ -4,10 +4,28 @@ import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { useEffect, useState } from "react";
 
 const REACT_APP_API_HOST = process.env.REACT_APP_API_HOST;
 
 function MenuBar() {
+  const [userName, setUserName] = useState("");
+  const [userRole, setUserRole] = useState(0);
+
+  useEffect(() => {
+    axios
+      .get(REACT_APP_API_HOST + "/auth/info", { withCredentials: true })
+      .then((res) => {
+        if (res.data.user_name) setUserName(res.data.user_name);
+        if (res.data.user_role) setUserRole(res.data.user_role);
+      })
+      .catch((err) => {
+        if (err.response.status === 403) {
+          window.location.replace("/login");
+        }
+      });
+  }, []);
+
   const onLogout = (e) => {
     axios
       .post(REACT_APP_API_HOST + "/auth/logout", null, {
@@ -32,7 +50,9 @@ function MenuBar() {
         <Col>
           <Row>
             <Col>
-              <h6 className="text-end mt-1">방원선 교수님</h6>
+              <h6 className="text-end mt-1">
+                {userName} {userRole === 0 ? "학생" : "교수님"}
+              </h6>
             </Col>
             <Col>
               <Button
