@@ -7,9 +7,8 @@ import Button from "react-bootstrap/Button";
 import { useState } from "react";
 import MenuBar from "../components/MenuBar";
 import ToggleButton from "react-bootstrap/ToggleButton";
-import axios from "axios";
+import { axiosInstance } from "../api/axios";
 
-const REACT_APP_API_HOST = process.env.REACT_APP_API_HOST;
 const ROLE = {
   STUDENT: 0,
   PROFESSOR: 1,
@@ -61,8 +60,8 @@ function RegisterPage() {
       user_role: role,
     };
 
-    axios
-      .post(REACT_APP_API_HOST + "/users", body)
+    axiosInstance
+      .post("/users", body)
       .then((res) => {
         if (res.status === 200) {
           alert(res.data);

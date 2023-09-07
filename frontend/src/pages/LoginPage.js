@@ -6,15 +6,11 @@ import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
-
-const REACT_APP_API_HOST = process.env.REACT_APP_API_HOST;
+import { axiosInstance } from "../api/axios";
 
 function LoginPage() {
   const [id, setId] = useState("");
   const [pwd, setPwd] = useState("");
-
-  useEffect(() => {}, []);
 
   const onIdChange = (event) => {
     setId(event.target.value);
@@ -23,15 +19,11 @@ function LoginPage() {
     setPwd(event.target.value);
   };
   const onLogin = () => {
-    axios
-      .post(
-        REACT_APP_API_HOST + "/auth/login",
-        {
-          user_id: id,
-          user_password: pwd,
-        },
-        { withCredentials: true }
-      )
+    axiosInstance
+      .post("/auth/login", {
+        user_id: id,
+        user_password: pwd,
+      })
       .then((res) => {
         if (res.status === 200) {
           window.location.replace("/");

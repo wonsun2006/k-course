@@ -3,18 +3,16 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import { axiosInstance } from "../api/axios";
 import { useEffect, useState } from "react";
-
-const REACT_APP_API_HOST = process.env.REACT_APP_API_HOST;
 
 function MenuBar() {
   const [userName, setUserName] = useState("");
   const [userRole, setUserRole] = useState(0);
 
   useEffect(() => {
-    axios
-      .get(REACT_APP_API_HOST + "/auth/info", { withCredentials: true })
+    axiosInstance
+      .get("/auth/info")
       .then((res) => {
         if (res.data.user_name) setUserName(res.data.user_name);
         if (res.data.user_role) setUserRole(res.data.user_role);
@@ -27,10 +25,8 @@ function MenuBar() {
   }, []);
 
   const onLogout = (e) => {
-    axios
-      .post(REACT_APP_API_HOST + "/auth/logout", null, {
-        withCredentials: true,
-      })
+    axiosInstance
+      .post("/auth/logout")
       .then((res) => {
         window.location.replace("/");
       })

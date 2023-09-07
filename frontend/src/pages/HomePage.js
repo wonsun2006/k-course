@@ -1,13 +1,11 @@
 import { useEffect } from "react";
-import axios from "axios";
 import MenuBar from "../components/MenuBar";
-
-const REACT_APP_API_HOST = process.env.REACT_APP_API_HOST;
+import { axiosInstance } from "../api/axios";
 
 function HomePage() {
   useEffect(() => {
-    axios
-      .get(REACT_APP_API_HOST + "/auth/login-check", { withCredentials: true })
+    axiosInstance
+      .get("/auth/login-check")
       .then((res) => {
         if (res.status === 200) {
           if (!res.data) {
