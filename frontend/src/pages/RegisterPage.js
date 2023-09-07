@@ -80,7 +80,7 @@ function RegisterPage() {
 
   return (
     <Col>
-      <MenuBar />
+      <MenuBar profile={false} />
       <Container
         className="d-flex justify-content-start align-items-start"
         // style={{ height: "100vh" }}

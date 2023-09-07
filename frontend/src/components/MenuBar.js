@@ -6,22 +6,25 @@ import { Link } from "react-router-dom";
 import { axiosInstance } from "../api/axios";
 import { useEffect, useState } from "react";
 
-function MenuBar() {
+function MenuBar({ profile = true }) {
   const [userName, setUserName] = useState("");
   const [userRole, setUserRole] = useState(0);
 
   useEffect(() => {
-    axiosInstance
-      .get("/auth/info")
-      .then((res) => {
-        if (res.data.user_name) setUserName(res.data.user_name);
-        if (res.data.user_role) setUserRole(res.data.user_role);
-      })
-      .catch((err) => {
-        if (err.response.status === 403) {
-          window.location.replace("/login");
-        }
-      });
+    if (profile) {
+      axiosInstance
+        .get("/auth/info")
+        .then((res) => {
+          if (res.data.user_name) setUserName(res.data.user_name);
+          if (res.data.user_role) setUserRole(res.data.user_role);
+        })
+        .catch((err) => {
+          if (err.response.status === 403) {
+            // return;
+            window.location.replace("/login");
+          }
+        });
+    }
   }, []);
 
   const onLogout = (e) => {
@@ -44,23 +47,25 @@ function MenuBar() {
           </Link>
         </Col>
         <Col>
-          <Row>
-            <Col>
-              <h6 className="text-end mt-1">
-                {userName} {userRole === 0 ? "학생" : "교수님"}
-              </h6>
-            </Col>
-            <Col>
-              <Button
-                variant="outline-primary"
-                id="logout-button"
-                onClick={onLogout}
-                size="sm"
-              >
-                로그아웃
-              </Button>
-            </Col>
-          </Row>
+          {profile && (
+            <Row>
+              <Col>
+                <h6 className="text-end mt-1">
+                  {userName} {userRole === 0 ? "학생" : "교수님"}
+                </h6>
+              </Col>
+              <Col>
+                <Button
+                  variant="outline-primary"
+                  id="logout-button"
+                  onClick={onLogout}
+                  size="sm"
+                >
+                  로그아웃
+                </Button>
+              </Col>
+            </Row>
+          )}
         </Col>
       </Row>
     </Container>
