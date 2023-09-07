@@ -51,8 +51,24 @@ router.post("/logout", function (req, res) {
 router.get("/login-check", function (req, res) {
   if (req.session.user_id) {
     res.status(200).json(true);
-    console.log("logout");
+  } else {
     res.status(200).json(false);
+  }
+});
+
+router.get("/info", function (req, res) {
+  const user_id = req.session.user_id;
+  if (user_id) {
+    db.query(
+      "SELECT user_id, user_name, id_num, user_role FROM users WHERE user_id=?",
+      [user_id],
+      (error, rows, fields) => {
+        if (error) throw error;
+        res.json(rows[0]);
+      }
+    );
+  } else {
+    res.status(403).json("로그인이 필요합니다.");
   }
 });
 

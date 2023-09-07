@@ -5,13 +5,6 @@ const { checkKeys, createHash } = require("../utils/common.js");
 const db = connection.init();
 connection.open(db);
 
-// router.get("/", function (req, res) {
-//   db.query("SELECT * from users", (error, rows, fields) => {
-//     if (error) throw error;
-//     res.send(rows);
-//   });
-// });
-
 router.post("/", function (req, res) {
   const body = req.body;
   const required_key = [
