@@ -8,6 +8,8 @@ require("dotenv").config();
 const app = express();
 const users = require("./routers/users");
 const auth = require("./routers/auth");
+const courses = require("./routers/courses");
+const registration = require("./routers/registration");
 
 app.use(
   cors({
@@ -36,6 +38,8 @@ const SERVER_PORT = process.env.SERVER_PORT;
 
 app.use("/users", users);
 app.use("/auth", auth);
+app.use("/courses", courses);
+app.use("/registration", registration);
 
 app.listen(SERVER_PORT, (error) => {
   if (!error) console.log("Server is running on " + SERVER_PORT);
