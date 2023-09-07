@@ -6,6 +6,9 @@ import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
+
+const REACT_APP_API_HOST = process.env.REACT_APP_API_HOST;
 
 function LoginPage() {
   const [id, setId] = useState("");
@@ -20,6 +23,24 @@ function LoginPage() {
     setPwd(event.target.value);
   };
   const onLogin = () => {
+    axios
+      .post(
+        REACT_APP_API_HOST + "/auth/login",
+        {
+          user_id: id,
+          user_password: pwd,
+        },
+        { withCredentials: true }
+      )
+      .then((res) => {
+        if (res.status === 200) {
+          window.location.replace("/");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        alert(err);
+      });
     console.log(id);
     console.log(pwd);
   };

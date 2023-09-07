@@ -4,11 +4,10 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import MenuBar from "../components/MenuBar";
 import ToggleButton from "react-bootstrap/ToggleButton";
 import axios from "axios";
-import { redirect } from "react-router-dom";
 
 const REACT_APP_API_HOST = process.env.REACT_APP_API_HOST;
 const ROLE = {
