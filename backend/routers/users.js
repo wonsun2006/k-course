@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const connection = require("../config/mysql.js");
+const { connection } = require("../config/mysql.js");
 const { checkKeys, createHash } = require("../utils/common.js");
 const db = connection.init();
 connection.open(db);
