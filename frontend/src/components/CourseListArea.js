@@ -3,13 +3,21 @@ import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import CourseList from "./CourseList";
 import { useRecoilState, useResetRecoilState } from "recoil";
-import { courseMode } from "../states/atom";
+import { courseList, courseMode } from "../states/atom";
 import { LIST_MODE } from "../constants/enums";
+import { useEffect, useState } from "react";
+import { axiosInstance } from "../api/axios";
 
 function CourseListArea({ title, end = null }) {
   const [mode, setMode] = useRecoilState(courseMode);
-  const courses1 = [0, 1, 2, 3];
-  const courses2 = [4, 5, 6];
+  const [courses, setCourses] = useRecoilState(courseList);
+
+  useEffect(() => {
+    axiosInstance.get("/courses").then((res) => {
+      setCourses(res.data);
+    });
+  }, []);
+
   return (
     <Container
       className="rounded border border-danger"
@@ -25,7 +33,7 @@ function CourseListArea({ title, end = null }) {
         <Col>{end}</Col>
       </Row>
       <Row>
-        <CourseList courses={mode === 0 ? courses1 : courses2} mode={mode} />
+        <CourseList courses={courses} mode={mode} />
       </Row>
     </Container>
   );

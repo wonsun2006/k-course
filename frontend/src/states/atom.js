@@ -5,3 +5,8 @@ export const courseMode = atom({
   key: "courseMode",
   default: LIST_MODE.STUDENT_COURSE,
 });
+
+export const courseList = atom({
+  key: "courseList",
+  default: [],
+});

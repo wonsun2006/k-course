@@ -9,7 +9,7 @@ function AreaTopBar({ title = null, center = null, end = null }) {
         <h2>{title}</h2>
       </Col>
       <Col className="d-flex justify-content-center">{center}</Col>
-      <Col>{end}</Col>
+      <Col className="d-flex justify-content-end align-items-center">{end}</Col>
     </Container>
   );
 }
