@@ -7,11 +7,13 @@ import Col from "react-bootstrap/Col";
 import StudentCourseArea from "../components/StudentCourseArea";
 import ProfessorCourseArea from "../components/ProfessorCourseArea";
 import { useRecoilState, useResetRecoilState } from "recoil";
-import { courseMode } from "../states/atom";
-import { LIST_MODE, USER_ROLE } from "../constants/enums";
+import { courseModeAtom, postModeAtom } from "../states/atom";
+import { LIST_MODE, POST_MODE, USER_ROLE } from "../constants/enums";
+import StudentPostArea from "../components/StudentPostArea";
 
 function HomePage() {
-  const [mode, setMode] = useRecoilState(courseMode);
+  const [courseMode, setCourseMode] = useRecoilState(courseModeAtom);
+  const [postMode, setPostMode] = useRecoilState(postModeAtom);
 
   useEffect(() => {
     axiosInstance
@@ -26,8 +28,12 @@ function HomePage() {
             axiosInstance
               .get("/auth/info")
               .then((res) => {
-                if (res.data.user_role === USER_ROLE.PROFESSOR)
-                  setMode(LIST_MODE.PROFESSOR_COURSE);
+                if (res.data.user_role === USER_ROLE.PROFESSOR) {
+                  setCourseMode(LIST_MODE.PROFESSOR_COURSE);
+                  setPostMode(POST_MODE.PROFESSOR);
+                } else {
+                  setPostMode(POST_MODE.STUDENT);
+                }
               })
               .catch((err) => {
                 alert(err);
@@ -61,7 +67,7 @@ function HomePage() {
               fluid
               className="bg-light rounded border border-3 border-danger h-100"
             >
-              {mode !== LIST_MODE.PROFESSOR_COURSE ? (
+              {courseMode !== LIST_MODE.PROFESSOR_COURSE ? (
                 <StudentCourseArea />
               ) : (
                 <ProfessorCourseArea />
@@ -72,7 +78,9 @@ function HomePage() {
             <Container
               fluid
               className="bg-light rounded border border-3 border-danger h-100"
-            ></Container>
+            >
+              <StudentPostArea />
+            </Container>
           </Col>
         </Row>
       </Container>

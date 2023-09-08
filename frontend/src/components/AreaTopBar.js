@@ -4,11 +4,13 @@ import Container from "react-bootstrap/Container";
 
 function AreaTopBar({ title = null, center = null, end = null }) {
   return (
-    <Container className="d-flex mt-2 mb-2">
+    <Container className="d-flex mt-2 mb-2" style={{ height: "40px" }}>
       <Col>
         <h2>{title}</h2>
       </Col>
-      <Col className="d-flex justify-content-center">{center}</Col>
+      <Col className="d-flex justify-content-center align-items-center">
+        {center}
+      </Col>
       <Col className="d-flex justify-content-end align-items-center">{end}</Col>
     </Container>
   );

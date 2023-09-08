@@ -1,21 +1,16 @@
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
-import CourseList from "./CourseList";
+import PostList from "./PostList";
 import { useRecoilState, useResetRecoilState } from "recoil";
-import { courseList, courseModeAtom } from "../states/atom";
+import { postList, postModeAtom } from "../states/atom";
 import { useEffect, useState } from "react";
 import { axiosInstance } from "../api/axios";
 
-function CourseListArea({ title, end = null }) {
-  const [mode, setMode] = useRecoilState(courseModeAtom);
-  const [courses, setCourses] = useRecoilState(courseList);
+function PostListArea({ title, end = null }) {
+  const [posts, setPosts] = useRecoilState(postList);
 
-  useEffect(() => {
-    axiosInstance.get("/courses").then((res) => {
-      setCourses(res.data);
-    });
-  }, []);
+  // useEffect(() => {}, []);
 
   return (
     <Container
@@ -32,10 +27,10 @@ function CourseListArea({ title, end = null }) {
         <Col>{end}</Col>
       </Row>
       <Row>
-        <CourseList courses={courses} mode={mode} />
+        <PostList posts={posts} />
       </Row>
     </Container>
   );
 }
 
-export default CourseListArea;
+export default PostListArea;

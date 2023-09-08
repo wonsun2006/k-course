@@ -4,12 +4,12 @@ import AreaTopBar from "./AreaTopBar";
 import CourseListArea from "./CourseListArea";
 import SelectButtonGroup from "./SelectButtonGroup";
 import { useRecoilState, useResetRecoilState } from "recoil";
-import { courseMode, courseList } from "../states/atom";
+import { courseModeAtom, courseList } from "../states/atom";
 import { LIST_MODE } from "../constants/enums";
 import { axiosInstance } from "../api/axios";
 
 function StudentCourseArea() {
-  const [mode, setMode] = useRecoilState(courseMode);
+  const [mode, setMode] = useRecoilState(courseModeAtom);
   const [courses, setCourses] = useRecoilState(courseList);
 
   const toggleList = [
