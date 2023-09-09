@@ -3,16 +3,17 @@ import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import ListGroup from "react-bootstrap/ListGroup";
 import Button from "react-bootstrap/Button";
-import { LIST_MODE } from "../constants/enums";
+import { LIST_MODE, POST_MODE } from "../constants/enums";
 import axios from "axios";
 import { axiosInstance } from "../api/axios";
 import { useRecoilState } from "recoil";
-import { postList, selectedCourseAtom } from "../states/atom";
+import { postList, selectedCourseAtom, postModeAtom } from "../states/atom";
 
 function CourseList({ courses, mode = LIST_MODE.STUDENT_COURSE }) {
   const [posts, setPosts] = useRecoilState(postList);
   const [selectedCourse, setSelectedCourse] =
     useRecoilState(selectedCourseAtom);
+  const [postMode, setPostMode] = useRecoilState(postModeAtom);
   var endButton = null;
 
   switch (mode) {
@@ -81,6 +82,35 @@ function CourseList({ courses, mode = LIST_MODE.STUDENT_COURSE }) {
   return (
     <Container className="d-flex justify-content-center">
       <ListGroup className="w-100">
+        {mode === LIST_MODE.STUDENT_COURSE && (
+          <ListGroup.Item>
+            <Row
+              onClick={(event) => {
+                axiosInstance
+                  .get("/recent")
+                  .then((res) => {
+                    setPosts(res.data);
+                    setSelectedCourse({
+                      course_id: "recent",
+                      course_name: "최근 게시글",
+                    });
+                  })
+                  .catch((err) => {
+                    alert("게시글을 불러올 수 없습니다.");
+                  });
+              }}
+            >
+              <Col className="mt-2">
+                <Row>
+                  <h5>{"최근 게시글"}</h5>
+                </Row>
+              </Col>
+              <Col className="d-flex align-items-center justify-content-end">
+                {"보기>"}
+              </Col>
+            </Row>
+          </ListGroup.Item>
+        )}
         {courses &&
           courses.map((val, idx) => (
             <ListGroup.Item>

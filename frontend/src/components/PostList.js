@@ -50,7 +50,12 @@ function PostList({ posts }) {
               <Row>
                 <Col xs={10} className="mt-2">
                   <Row>
-                    <h5>{val.title ?? "제목없음"}</h5>
+                    <div className="d-flex flex-row gap-2 align-items-center">
+                      <h5>{val.title ?? "제목없음"}</h5>
+                      <h6 style={{ color: "gray" }}>
+                        {val.course_name ? "from " + val.course_name : null}
+                      </h6>
+                    </div>
                   </Row>
                   <Row>
                     <div

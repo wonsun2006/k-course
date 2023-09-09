@@ -2,15 +2,11 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import PostList from "./PostList";
-import { useRecoilState, useResetRecoilState } from "recoil";
-import { postList, postModeAtom } from "../states/atom";
-import { useEffect, useState } from "react";
-import { axiosInstance } from "../api/axios";
+import { useRecoilState } from "recoil";
+import { postList } from "../states/atom";
 
 function PostListArea({ title, end = null }) {
   const [posts, setPosts] = useRecoilState(postList);
-
-  // useEffect(() => {}, []);
 
   return (
     <Container
