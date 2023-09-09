@@ -7,10 +7,16 @@ import { LIST_MODE, POST_MODE } from "../constants/enums";
 import axios from "axios";
 import { axiosInstance } from "../api/axios";
 import { useRecoilState } from "recoil";
-import { postList, selectedCourseAtom, postModeAtom } from "../states/atom";
+import {
+  postList,
+  selectedCourseAtom,
+  postModeAtom,
+  studentList,
+} from "../states/atom";
 
 function CourseList({ courses, mode = LIST_MODE.STUDENT_COURSE }) {
   const [posts, setPosts] = useRecoilState(postList);
+  const [students, setStudents] = useRecoilState(studentList);
   const [selectedCourse, setSelectedCourse] =
     useRecoilState(selectedCourseAtom);
   const [postMode, setPostMode] = useRecoilState(postModeAtom);
@@ -131,6 +137,13 @@ function CourseList({ courses, mode = LIST_MODE.STUDENT_COURSE }) {
                       .catch((err) => {
                         alert("게시글을 불러올 수 없습니다.");
                       });
+                    if (mode === LIST_MODE.PROFESSOR_COURSE) {
+                      axiosInstance
+                        .get("/courses/" + val.course_id + "/students")
+                        .then((res) => {
+                          setStudents(res.data);
+                        });
+                    }
                   }
                 }}
               >

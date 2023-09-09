@@ -6,6 +6,7 @@ import PostListArea from "./PostListArea";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
+import SelectButtonGroup from "./SelectButtonGroup";
 import { useRecoilState } from "recoil";
 import { useState } from "react";
 import { selectedCourseAtom, postModeAtom } from "../states/atom";
@@ -14,6 +15,7 @@ import { textEditorformats, textEditorModules } from "../constants/config";
 import { axiosInstance } from "../api/axios";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import StudentListArea from "./StudentListArea";
 
 function StudentPostArea() {
   const [selectedCourse, setSelectedCourse] =
@@ -54,25 +56,54 @@ function StudentPostArea() {
     }
   };
 
+  const toggleList = [
+    {
+      title: "게시글",
+      onclick: () => {
+        setPostMode(POST_MODE.PROFESSOR);
+      },
+    },
+    {
+      title: "수강인원",
+      onclick: () => {
+        setPostMode(POST_MODE.STUDENT_LIST);
+      },
+    },
+  ];
+
   return (
     <Col className="h-100">
-      <AreaTopBar title={selectedCourse.course_name ?? ""} />
-      <PostListArea
-        title="게시글 목록"
+      <AreaTopBar
+        title={selectedCourse.course_name ?? ""}
         end={
-          postMode === POST_MODE.PROFESSOR &&
+          (postMode === POST_MODE.PROFESSOR ||
+            postMode === POST_MODE.STUDENT_LIST) &&
           selectedCourse.course_id !== null ? (
-            <Button
-              variant="outline-primary bg-gray100"
-              id="end-button"
-              onClick={handleShow}
-              size="sm"
-            >
-              새 게시글 작성
-            </Button>
+            <SelectButtonGroup toggleList={toggleList} />
           ) : null
         }
       />
+      {postMode === POST_MODE.STUDENT_LIST ? (
+        <StudentListArea title="수강인원 목록" />
+      ) : (
+        <PostListArea
+          title="게시글 목록"
+          end={
+            postMode === POST_MODE.PROFESSOR &&
+            selectedCourse.course_id !== null ? (
+              <Button
+                variant="outline-primary bg-gray100"
+                id="end-button"
+                onClick={handleShow}
+                size="sm"
+              >
+                새 게시글 작성
+              </Button>
+            ) : null
+          }
+        />
+      )}
+
       <Offcanvas
         show={show}
         onHide={handleClose}

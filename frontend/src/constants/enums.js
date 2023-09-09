@@ -8,6 +8,7 @@ export const POST_MODE = {
   STUDENT: 0,
   PROFESSOR: 1,
   RECENT: 2,
+  STUDENT_LIST: 3,
 };
 
 export const USER_ROLE = {

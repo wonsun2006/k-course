@@ -21,6 +21,11 @@ export const postList = atom({
   default: [],
 });
 
+export const studentList = atom({
+  key: "studentList",
+  default: [],
+});
+
 export const selectedCourseAtom = atom({
   key: "selectedCourseAtom",
   default: {
