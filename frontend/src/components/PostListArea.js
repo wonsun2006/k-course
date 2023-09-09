@@ -20,7 +20,9 @@ function PostListArea({ title, end = null }) {
         <Col className="d-flex align-items-center mt-2">
           <h5>{title}</h5>
         </Col>
-        <Col>{end}</Col>
+        <Col className="d-flex justify-content-end align-items-center">
+          {end}
+        </Col>
       </Row>
       <Row>
         <PostList posts={posts} />

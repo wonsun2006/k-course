@@ -56,8 +56,9 @@ function StudentPostArea() {
 
   return (
     <Col className="h-100">
-      <AreaTopBar
-        title={selectedCourse.course_name ?? ""}
+      <AreaTopBar title={selectedCourse.course_name ?? ""} />
+      <PostListArea
+        title="게시글 목록"
         end={
           postMode === POST_MODE.PROFESSOR &&
           selectedCourse.course_id !== null ? (
@@ -72,7 +73,6 @@ function StudentPostArea() {
           ) : null
         }
       />
-      <PostListArea title="게시글 목록" />
       <Offcanvas
         show={show}
         onHide={handleClose}
