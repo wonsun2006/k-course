@@ -3,6 +3,7 @@ import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import ListGroup from "react-bootstrap/ListGroup";
 import Button from "react-bootstrap/Button";
+import moment from "moment";
 import { useRecoilState, useResetRecoilState } from "recoil";
 import { POST_MODE } from "../constants/enums";
 import { postModeAtom, selectedCourseAtom } from "../states/atom";
@@ -47,7 +48,7 @@ function PostList({ posts }) {
           posts.map((val, idx) => (
             <ListGroup.Item>
               <Row>
-                <Col className="mt-2">
+                <Col xs={10} className="mt-2">
                   <Row>
                     <h5>{val.title ?? "제목없음"}</h5>
                   </Row>
@@ -59,8 +60,25 @@ function PostList({ posts }) {
                     ></div>
                   </Row>
                 </Col>
-                <Col className="d-flex align-items-center justify-content-end">
-                  {endButton(val.post_id)}
+                <Col xs={2}>
+                  <div className="d-flex flex-column justify-content-end align-items-end">
+                    <div>
+                      <h6
+                        style={{
+                          textAlign: "end",
+                          fontSize: "14px",
+                        }}
+                      >
+                        {val.edited_time
+                          ? moment(new Date(val.edited_time)).format(
+                              "YYYY/MM/DD HH:mm:ss"
+                            )
+                          : ""}
+                      </h6>
+                    </div>
+
+                    <div>{endButton(val.post_id)}</div>
+                  </div>
                 </Col>
               </Row>
             </ListGroup.Item>
