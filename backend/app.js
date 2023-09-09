@@ -47,7 +47,8 @@ app.get("/recent", isUser, function (req, res) {
   const db = connection.init();
   connection.open(db);
   db.query(
-    "SELECT * FROM posts WHERE course_id IN (SELECT course_id FROM registration WHERE student_id=?) ORDER BY edited_time ASC",
+    "SELECT * FROM posts LEFT JOIN courses ON courses.course_id=posts.course_id " +
+      "WHERE posts.course_id IN (SELECT course_id FROM registration WHERE student_id=?) ORDER BY posts.edited_time ASC",
     [req.session.user_id],
     (error, rows, fields) => {
       if (error) res.status(500).json("최근 게시글 조회에 실패했습니다.");
