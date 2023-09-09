@@ -11,6 +11,7 @@ import { useState } from "react";
 import { selectedCourseAtom, postModeAtom } from "../states/atom";
 import { POST_MODE } from "../constants/enums";
 import { textEditorformats, textEditorModules } from "../constants/config";
+import { axiosInstance } from "../api/axios";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
@@ -22,30 +23,34 @@ function StudentPostArea() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    setShow(false);
+    setContent("");
+  };
   const handleShow = () => setShow(true);
 
-  const onTitleChange = (val) => setTitle(val);
+  const onTitleChange = (event) => setTitle(event.target.value);
   const onContentChange = (val) => setContent(val);
 
   const onCreatePost = () => {
     if (title !== "" && content !== "") {
-      // axiosInstance
-      //   .post("/posts", {
-      //     course_name: newCourseName,
-      //   })
-      //   .then((res) => {
-      //     if (res.status === 200) {
-      //       alert('게시글이 성공적으로 추가되었습니다.');
-      //       setTitle('');
-      //       setContent('');
-      //       handleClose();
-      //       window.location.replace("/");
-      //     }
-      //   })
-      //   .catch((err) => {
-      //     if (err) alert(err);
-      //   });
+      axiosInstance
+        .post("/courses/" + selectedCourse.course_id + "/posts", {
+          title: title,
+          content: content,
+        })
+        .then((res) => {
+          if (res.status === 200) {
+            alert("게시글이 성공적으로 추가되었습니다.");
+            setTitle("");
+            setContent("");
+            handleClose();
+            window.location.replace("/");
+          }
+        })
+        .catch((err) => {
+          if (err) console.log(err);
+        });
     }
   };
 
@@ -54,7 +59,8 @@ function StudentPostArea() {
       <AreaTopBar
         title={selectedCourse.course_name ?? ""}
         end={
-          postMode === POST_MODE.PROFESSOR ? (
+          postMode === POST_MODE.PROFESSOR &&
+          selectedCourse.course_id !== null ? (
             <Button
               variant="outline-primary bg-gray100"
               id="end-button"

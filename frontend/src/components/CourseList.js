@@ -6,8 +6,13 @@ import Button from "react-bootstrap/Button";
 import { LIST_MODE } from "../constants/enums";
 import axios from "axios";
 import { axiosInstance } from "../api/axios";
+import { useRecoilState } from "recoil";
+import { postList, selectedCourseAtom } from "../states/atom";
 
 function CourseList({ courses, mode = LIST_MODE.STUDENT_COURSE }) {
+  const [posts, setPosts] = useRecoilState(postList);
+  const [selectedCourse, setSelectedCourse] =
+    useRecoilState(selectedCourseAtom);
   var endButton = null;
 
   switch (mode) {
@@ -84,8 +89,18 @@ function CourseList({ courses, mode = LIST_MODE.STUDENT_COURSE }) {
                   if (event.target.id === "end-button") {
                     event.preventDefault();
                   } else if (mode !== LIST_MODE.ENROLL) {
-                    // console.log(val.course_id);
-                    alert("open course");
+                    setSelectedCourse({
+                      course_id: val.course_id,
+                      course_name: val.course_name,
+                    });
+                    axiosInstance
+                      .get("/courses/" + val.course_id + "/posts")
+                      .then((res) => {
+                        setPosts(res.data);
+                      })
+                      .catch((err) => {
+                        alert("게시글을 불러올 수 없습니다.");
+                      });
                   }
                 }}
               >
