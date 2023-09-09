@@ -10,6 +10,8 @@ const users = require("./routers/users");
 const auth = require("./routers/auth");
 const courses = require("./routers/courses");
 const registration = require("./routers/registration");
+const isUser = require("./middlewares/isUserMiddleware");
+const { connection } = require("./config/mysql.js");
 
 app.use(
   cors({
@@ -40,6 +42,19 @@ app.use("/users", users);
 app.use("/auth", auth);
 app.use("/courses", courses);
 app.use("/registration", registration);
+
+app.get("/recent", isUser, function (req, res) {
+  const db = connection.init();
+  connection.open(db);
+  db.query(
+    "SELECT * FROM posts WHERE course_id IN (SELECT course_id FROM registration WHERE student_id=?) ORDER BY edited_time ASC",
+    [req.session.user_id],
+    (error, rows, fields) => {
+      if (error) res.status(500).json("최근 게시글 조회에 실패했습니다.");
+      res.status(200).json(rows);
+    }
+  );
+});
 
 app.listen(SERVER_PORT, (error) => {
   if (!error) console.log("Server is running on " + SERVER_PORT);
