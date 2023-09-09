@@ -144,6 +144,7 @@ router.post("/:course_id/posts", isProfessor, function (req, res) {
   );
 });
 
+// 게시글 수정 API
 // router.put("/:course_id/posts/:post_id", isProfessor, function (req, res) {
 //   const { course_id, post_id } = req.params;
 //   const body = req.body;
@@ -187,6 +188,34 @@ router.delete("/:course_id/posts/:post_id", isProfessor, function (req, res) {
           (error, result) => {
             if (error) res.status(500).json("게시글 삭제에 실패했습니다.");
             res.status(200).json("게시글을 성공적으로 삭제했습니다.");
+          }
+        );
+      } else {
+        res.status(401).json("교수자의 강의가 아닙니다.");
+      }
+    }
+  );
+});
+
+router.get("/:course_id/students", isProfessor, function (req, res) {
+  const { course_id } = req.params;
+  db.query(
+    "SELECT EXISTS(SELECT * FROM courses WHERE course_id=? AND professor_id=?) AS id_exists",
+    [course_id, req.session.user_id],
+    (error, rows, fields) => {
+      const id_exists = rows[0]["id_exists"];
+      if (id_exists === 1) {
+        db.query(
+          "SELECT * FROM registration LEFT JOIN users ON student_id=user_id WHERE course_id=? AND registration_status=1",
+          [course_id],
+          (error, result) => {
+            if (error) res.status(500).json("수강인원 조회에 실패했습니다.");
+            const student_data = result.map((obj) => {
+              const newObj = { ...obj };
+              delete newObj.user_password;
+              return newObj;
+            });
+            res.status(200).json(student_data);
           }
         );
       } else {

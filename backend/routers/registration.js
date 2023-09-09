@@ -84,7 +84,7 @@ router.delete("/", isUser, function (req, res) {
       "SELECT professor_id FROM courses WHERE course_id=?",
       [body.course_id],
       (error, rows, fields) => {
-        if (rows[0].user_id === req.session.user_id) {
+        if (rows[0].professor_id === req.session.user_id) {
           db.query(
             "DELETE FROM registration WHERE student_id=? AND course_id=?",
             [body.student_id, body.course_id],
