@@ -27,8 +27,9 @@ router.get("/", isUser, function (req, res) {
   const params = req.query;
   if (params.registration === "false") {
     db.query(
-      "SELECT * FROM courses WHERE course_id NOT IN (" +
-        "SELECT course_id FROM registration WHERE student_id=? AND (registration_status=-1 OR registration_status=1))",
+      "SELECT course_id, course_name, professor_id, user_name AS professor_name " +
+        "FROM courses LEFT JOIN users ON professor_id=user_id WHERE course_id " +
+        "NOT IN (SELECT course_id FROM registration WHERE student_id=? AND (registration_status=-1 OR registration_status=1))",
       [req.session.user_id],
       (error, result) => {
         res.status(200).json(result);
@@ -37,7 +38,9 @@ router.get("/", isUser, function (req, res) {
   } else {
     const query =
       req.session.user_role === 0
-        ? "SELECT * FROM courses LEFT JOIN registration ON courses.course_id=registration.course_id WHERE student_id=?"
+        ? "SELECT course_id, course_name, professor_id, user_name AS professor_name " +
+          "FROM courses LEFT JOIN users ON professor_id=user_id WHERE course_id " +
+          "IN (SELECT course_id FROM registration WHERE student_id=?)"
         : "SELECT * FROM courses WHERE professor_id=?";
     db.query(query, [req.session.user_id], (error, result) => {
       res.status(200).json(result);
