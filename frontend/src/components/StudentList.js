@@ -6,11 +6,11 @@ import Button from "react-bootstrap/Button";
 import moment from "moment";
 import { useRecoilState, useResetRecoilState } from "recoil";
 import { POST_MODE } from "../constants/enums";
-import { postModeAtom, selectedCourseAtom } from "../states/atom";
+import { studentList, selectedCourseAtom } from "../states/atom";
 import { axiosInstance } from "../api/axios";
 
-function StudentList({ students }) {
-  const [postMode, setPostMode] = useRecoilState(postModeAtom);
+function StudentList() {
+  const [students, setStudents] = useRecoilState(studentList);
   const [selectedCourse, setSelectedCourse] =
     useRecoilState(selectedCourseAtom);
 
@@ -27,6 +27,11 @@ function StudentList({ students }) {
             },
           })
           .then((res) => {
+            axiosInstance
+              .get("/courses/" + selectedCourse.course_id + "/students")
+              .then((res) => {
+                setStudents(res.data);
+              });
             alert(res.data);
           });
       }}

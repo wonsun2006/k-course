@@ -3,26 +3,25 @@ import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import ListGroup from "react-bootstrap/ListGroup";
 import Button from "react-bootstrap/Button";
-import { LIST_MODE, POST_MODE } from "../constants/enums";
-import axios from "axios";
+import { LIST_MODE } from "../constants/enums";
 import { axiosInstance } from "../api/axios";
 import { useRecoilState } from "recoil";
 import {
   postList,
   selectedCourseAtom,
-  postModeAtom,
   studentList,
+  courseModeAtom,
 } from "../states/atom";
 
-function CourseList({ courses, mode = LIST_MODE.STUDENT_COURSE }) {
+function CourseList({ courses }) {
   const [posts, setPosts] = useRecoilState(postList);
   const [students, setStudents] = useRecoilState(studentList);
   const [selectedCourse, setSelectedCourse] =
     useRecoilState(selectedCourseAtom);
-  const [postMode, setPostMode] = useRecoilState(postModeAtom);
+  const [courseMode, setCourseMode] = useRecoilState(courseModeAtom);
   var endButton = null;
 
-  switch (mode) {
+  switch (courseMode) {
     case LIST_MODE.STUDENT_COURSE:
       endButton = (course_id) => (
         <Button
@@ -88,7 +87,7 @@ function CourseList({ courses, mode = LIST_MODE.STUDENT_COURSE }) {
   return (
     <Container className="d-flex justify-content-center">
       <ListGroup className="w-100">
-        {mode === LIST_MODE.STUDENT_COURSE && (
+        {courseMode === LIST_MODE.STUDENT_COURSE && (
           <ListGroup.Item>
             <Row
               onClick={(event) => {
@@ -124,7 +123,7 @@ function CourseList({ courses, mode = LIST_MODE.STUDENT_COURSE }) {
                 onClick={(event) => {
                   if (event.target.id === "end-button") {
                     event.preventDefault();
-                  } else if (mode !== LIST_MODE.ENROLL) {
+                  } else if (courseMode !== LIST_MODE.ENROLL) {
                     setSelectedCourse({
                       course_id: val.course_id,
                       course_name: val.course_name,
@@ -137,7 +136,7 @@ function CourseList({ courses, mode = LIST_MODE.STUDENT_COURSE }) {
                       .catch((err) => {
                         alert("게시글을 불러올 수 없습니다.");
                       });
-                    if (mode === LIST_MODE.PROFESSOR_COURSE) {
+                    if (courseMode === LIST_MODE.PROFESSOR_COURSE) {
                       axiosInstance
                         .get("/courses/" + val.course_id + "/students")
                         .then((res) => {
