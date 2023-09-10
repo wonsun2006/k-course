@@ -47,7 +47,7 @@ app.get("/recent", isUser, function (req, res) {
   const db = connection.init();
   connection.open(db);
   db.query(
-    "SELECT * FROM posts LEFT JOIN courses ON courses.course_id=posts.course_id " +
+    "SELECT post_id, title, content, posts.edited_time AS edited_time, courses.course_id AS course_id, course_name, professor_id FROM posts LEFT JOIN courses ON courses.course_id=posts.course_id " +
       "WHERE posts.course_id IN (SELECT course_id FROM registration WHERE student_id=?) ORDER BY posts.edited_time ASC",
     [req.session.user_id],
     (error, rows, fields) => {
