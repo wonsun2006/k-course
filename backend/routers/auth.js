@@ -28,7 +28,7 @@ router.post("/login", function (req, res) {
         req.session.user_role = result.user_role;
         req.session.save((err) => {
           if (err) res.status(500).json("세션 저장에 실패했습니다.");
-          res.status(200).json("로그인 성공했습니다.");
+          res.status(200).json(req.session.id);
         });
       } else {
         res.status(401).json("아이디 혹은 비밀번호가 일치하지 않습니다.");
