@@ -81,11 +81,8 @@ function RegisterPage() {
   return (
     <Col>
       <MenuBar profile={false} />
-      <Container
-        className="d-flex justify-content-start align-items-start"
-        // style={{ height: "100vh" }}
-      >
-        <Col xs={6}>
+      <Container className="d-flex justify-content-center align-items-center">
+        <Col xs={6} style={{ maxWidth: "400px" }}>
           <Row>
             <h4 className="text-start text-primary">회원가입</h4>
           </Row>

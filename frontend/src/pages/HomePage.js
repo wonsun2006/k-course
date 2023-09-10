@@ -9,7 +9,7 @@ import ProfessorCourseArea from "../components/ProfessorCourseArea";
 import { useRecoilState, useResetRecoilState } from "recoil";
 import { courseModeAtom, postModeAtom } from "../states/atom";
 import { LIST_MODE, POST_MODE, USER_ROLE } from "../constants/enums";
-import StudentPostArea from "../components/StudentPostArea";
+import StudentPostArea from "../components/PostArea";
 
 function HomePage() {
   const [courseMode, setCourseMode] = useRecoilState(courseModeAtom);
@@ -22,7 +22,6 @@ function HomePage() {
         if (res.status === 200) {
           if (!res.data) {
             // 로그인 상태 아닐 시 로그인 페이지로 이동
-            // return;
             window.location.replace("/login");
           } else {
             axiosInstance

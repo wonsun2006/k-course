@@ -18,12 +18,7 @@ function MenuBar({ profile = true }) {
           if (res.data.user_name) setUserName(res.data.user_name);
           if (res.data.user_role) setUserRole(res.data.user_role);
         })
-        .catch((err) => {
-          if (err.response.status === 403) {
-            // return;
-            window.location.replace("/login");
-          }
-        });
+        .catch((err) => {});
     }
   }, []);
 
