@@ -21,7 +21,7 @@ router.post("/login", function (req, res) {
         res.status(401).json("사용자가 존재하지 않습니다.");
       }
       const result = rows[0];
-      if (result.user_password === createHash(body.user_password)) {
+      if (result && result.user_password === createHash(body.user_password)) {
         req.session.user_id = result.user_id;
         req.session.user_name = result.user_name;
         req.session.id_num = result.id_num;
