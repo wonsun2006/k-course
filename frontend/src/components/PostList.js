@@ -66,7 +66,7 @@ function PostList({ posts }) {
                   </Row>
                 </Col>
                 <Col xs={2}>
-                  <div className="d-flex flex-column justify-content-end align-items-end">
+                  <div className="d-flex flex-column justify-content-end align-items-end flex-fill">
                     <div>
                       <h6
                         style={{
@@ -82,7 +82,7 @@ function PostList({ posts }) {
                       </h6>
                     </div>
 
-                    <div>{endButton(val.post_id)}</div>
+                    <div className="text-nowrap">{endButton(val.post_id)}</div>
                   </div>
                 </Col>
               </Row>

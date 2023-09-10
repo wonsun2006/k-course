@@ -5,7 +5,6 @@ import ListGroup from "react-bootstrap/ListGroup";
 import Button from "react-bootstrap/Button";
 import moment from "moment";
 import { useRecoilState, useResetRecoilState } from "recoil";
-import { POST_MODE } from "../constants/enums";
 import { studentList, selectedCourseAtom } from "../states/atom";
 import { axiosInstance } from "../api/axios";
 
@@ -70,7 +69,9 @@ function StudentList() {
                           : ""}
                       </h6>
                     </div>
-                    <div>{endButton(val.student_id)}</div>
+                    <div className="text-nowrap">
+                      {endButton(val.student_id)}
+                    </div>
                   </div>
                 </Col>
               </Row>

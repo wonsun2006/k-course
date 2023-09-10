@@ -9,7 +9,6 @@ import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import Container from "react-bootstrap/Container";
 import { LIST_MODE } from "../constants/enums";
-import axios from "axios";
 import { axiosInstance } from "../api/axios";
 
 function ProfessorCourseArea() {
@@ -56,12 +55,17 @@ function ProfessorCourseArea() {
           </Button>
         }
       />
-      <CourseListArea title="강의목록" mode={LIST_MODE.PROFESSOR_COURSE} />
+      <CourseListArea title="강의목록" />
       <Offcanvas
         show={show}
         onHide={handleClose}
         placement="bottom"
-        style={{ width: "80%", maxWidth: "600px", marginLeft: "40px" }}
+        style={{
+          width: "80%",
+          maxWidth: "350px",
+          marginLeft: "40px",
+          height: "220px",
+        }}
       >
         <Offcanvas.Header closeButton>
           <Offcanvas.Title>강의 개설</Offcanvas.Title>

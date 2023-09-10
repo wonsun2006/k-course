@@ -152,7 +152,7 @@ function CourseList({ courses }) {
                   </Row>
                   <Row>
                     <h6>
-                      {val.professor_id ? val.professor_id + " 교수님" : ""}
+                      {val.professor_name ? val.professor_name + " 교수님" : ""}
                     </h6>
                   </Row>
                 </Col>
