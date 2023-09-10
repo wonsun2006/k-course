@@ -30,8 +30,7 @@ function LoginPage() {
         }
       })
       .catch((err) => {
-        console.log(err);
-        alert(err);
+        alert(err.response.data);
       });
     console.log(id);
     console.log(pwd);
